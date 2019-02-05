@@ -9,15 +9,10 @@ open class SyncPlugin : Plugin<Project> {
 
     project.afterEvaluate {
       project.tasks.register("xcodeSync", SyncTask::class.java) { task ->
-        task.group = GROUP
+        task.group = "xcode"
         task.description = "Sync Kotlin files with an Xcode project"
-
         task.config = extension
       }
     }
-  }
-
-  companion object {
-    internal const val GROUP = "xcode"
   }
 }
