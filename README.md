@@ -11,3 +11,27 @@ need to be handled manually in Xcode.
 
 ## Usage
 
+Add the following to the buildscript section:
+
+```groovy
+buildscript {
+    dependencies {
+        classpath 'co.touchlab:kotlinxcodesync:0.1.2'
+    }
+}
+```
+
+Apply the plugin in the shared code project, and configure the plugin
+
+```groovy
+apply plugin: 'co.touchlab.kotlinxcodesync'
+
+
+xcode {
+  projectPath = "../../iosApp/iosApp.xcodeproj"
+  target = "iosApp"
+}
+```
+
+The 'projectPath' points at the Xcode project folder. 'target' is the target inside the Xcode project. There's also the optional 
+parameter 'group', which by default is set to 'Kotlin'. That is the group folder that files are copied into.
