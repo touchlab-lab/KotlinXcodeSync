@@ -1,7 +1,7 @@
 # Kotlin Xcode Sync
 
-Import kotlin files into an Xcode project. This is used in conjunction with the Xcode 
-Kotlin plugin to allow for Kotlin/Native debugging in an iOS application.
+Import kotlin files into an Xcode project. This is used in conjunction with the [Xcode 
+Kotlin plugin](https://github.com/touchlab/xcode-kotlin) to allow for Kotlin/Native debugging in an iOS application.
 
 Importing Kotlin files into Xcode is somewhat tricky to do manually. This plugin will facilitate
 that.
