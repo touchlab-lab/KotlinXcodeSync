@@ -16,7 +16,7 @@ Add the following to the buildscript section:
 ```groovy
 buildscript {
     dependencies {
-        classpath 'co.touchlab:kotlinxcodesync:0.1.2'
+        classpath 'co.touchlab:kotlinxcodesync:0.1.3'
     }
 }
 ```

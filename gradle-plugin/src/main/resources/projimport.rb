@@ -76,8 +76,7 @@ def addfiles (existingFiles, group_index, direc, pathBase, current_group, main_t
               puts "File #{projectPath} exists"
             else
               puts "File #{projectPath} created"
-                i = current_group.new_file(item)
-                main_target.add_file_references([i], '-w')
+              current_group.new_file(item)
             end
           end
         end
