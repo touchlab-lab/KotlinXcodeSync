@@ -21,7 +21,21 @@ if kot_group == nil
   kot_group = project.new_group(groupName)
 end
 
+kt_files = kot_group.recursive_children.select do |elem|
+  elem.kind_of? Xcodeproj::Project::Object::PBXFileReference
+end.map do |file_ref|
+  file_ref.real_path.to_s
+end.select do |path|
+  path.end_with?(".kt") and File.exists?(path)
+end
+
 group_index = {}
+
+def dlog(str)
+  if false
+    puts str
+  end
+end
 
 def walkGroups (group_index, pathBase, groups)
   groups.each do |group|
@@ -34,17 +48,6 @@ def walkGroups (group_index, pathBase, groups)
 end
 
 walkGroups(group_index, "", kot_group.groups)
-
-files = target.source_build_phase.files.to_a.map do |pbx_build_file|
-	pbx_build_file.file_ref.real_path.to_s
-
-end.select do |path|
-  path.end_with?(".kt")
-
-end.select do |path|
-  puts "Adding #{path}"
-  File.exists?(path)
-end
 
 def addfiles (existingFiles, group_index, direc, pathBase, current_group, main_target)
 
@@ -59,9 +62,9 @@ def addfiles (existingFiles, group_index, direc, pathBase, current_group, main_t
           if foundGroup == nil
             foundGroup = current_group.new_group(new_folder)
             group_index[groupPathName] = foundGroup
-            puts "creating #{groupPathName}"
+            dlog "creating #{groupPathName}"
           else
-            puts "existing #{groupPathName}"
+            dlog "existing #{groupPathName}"
           end
           addfiles(existingFiles, group_index, "#{item}/*", groupPathName, foundGroup, main_target)
         else
@@ -72,12 +75,10 @@ def addfiles (existingFiles, group_index, direc, pathBase, current_group, main_t
               path.end_with? projectPath
             }
             if fileFound
-              puts "File #{projectPath} exists"
+              dlog "File #{projectPath} exists"
             else
-              puts "File #{projectPath} created"
+              dlog "File #{projectPath} created"
               current_group.new_file(item)
-              # i = current_group.new_file(item)
-              # main_target.add_file_references([i], '-w')
             end
           end
         end
@@ -88,18 +89,7 @@ srcDirIndex = 3
 
 while srcDirIndex < ARGV.length do
   importPath = ARGV[srcDirIndex]
-  dirName = File.basename(importPath)
-  puts "Importing #{dirName}"
-  # groupPathName = '/' + dirName
-  # foundGroup = group_index[groupPathName]
-  # if foundGroup == nil
-  #   foundGroup = kot_group.new_group(dirName)
-  #   group_index[groupPathName] = foundGroup
-  # end
-  #
-  # addfiles(files, group_index, "#{importPath}/*", groupPathName, foundGroup, target)
-
-  addfiles(files, group_index, "#{importPath}/*", "", kot_group, target)
+  addfiles(kt_files, group_index, "#{importPath}/*", "", kot_group, target)
   srcDirIndex +=1
 end
 
