@@ -16,7 +16,7 @@ Add the following to the buildscript section:
 ```groovy
 buildscript {
     dependencies {
-        classpath 'co.touchlab:kotlinxcodesync:0.1.4'
+        classpath 'co.touchlab:kotlinxcodesync:0.1.5'
     }
 }
 ```
@@ -35,3 +35,16 @@ xcode {
 
 The 'projectPath' points at the Xcode project folder. 'target' is the target inside the Xcode project. There's also the optional 
 parameter 'group', which by default is set to 'Kotlin'. That is the group folder that files are copied into.
+
+## Dependencies
+
+You can add sources for dependencies. This is experimental and kind of manual, but will work if you get
+the correct config.
+
+Dependencies currently can only be added at the top level, rather than in the Kotlin Multiplatform config.
+
+```groovy
+dependencies {
+    xcodeSource "com.squareup.sqldelight:ios-driver-iosx64:1.1.3:sources"
+}
+```

@@ -3,7 +3,6 @@ require 'xcodeproj'
 project_file = ARGV[0]
 targetName = ARGV[1]
 groupName = ARGV[2]
-importPath = ARGV[3]
 
 project = Xcodeproj::Project.open(project_file)
 
@@ -14,7 +13,6 @@ if target == nil
   exit(false)
 end
 
-kot_group = nil
 kot_group = project.groups.find do |group|
   group.name == groupName
 end
@@ -78,14 +76,31 @@ def addfiles (existingFiles, group_index, direc, pathBase, current_group, main_t
             else
               puts "File #{projectPath} created"
               current_group.new_file(item)
+              # i = current_group.new_file(item)
+              # main_target.add_file_references([i], '-w')
             end
           end
         end
     end
 end
 
-main_target = project.targets.first
+srcDirIndex = 3
 
-addfiles(files, group_index, "#{importPath}/*", "", kot_group, main_target)
+while srcDirIndex < ARGV.length do
+  importPath = ARGV[srcDirIndex]
+  dirName = File.basename(importPath)
+  puts "Importing #{dirName}"
+  # groupPathName = '/' + dirName
+  # foundGroup = group_index[groupPathName]
+  # if foundGroup == nil
+  #   foundGroup = kot_group.new_group(dirName)
+  #   group_index[groupPathName] = foundGroup
+  # end
+  #
+  # addfiles(files, group_index, "#{importPath}/*", groupPathName, foundGroup, target)
+
+  addfiles(files, group_index, "#{importPath}/*", "", kot_group, target)
+  srcDirIndex +=1
+end
 
 project.save(project_file)

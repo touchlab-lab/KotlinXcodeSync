@@ -1,8 +1,8 @@
 package co.touchlab.kotlinxcodesync
 
 import org.gradle.api.DefaultTask
-//import org.gradle.api.artifacts.ResolvedArtifact
-//import org.gradle.api.file.CopySpec
+import org.gradle.api.artifacts.ResolvedArtifact
+import org.gradle.api.file.CopySpec
 import org.gradle.api.tasks.TaskAction
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -14,6 +14,18 @@ open class SyncTask : DefaultTask() {
   fun syncProject() {
     copyRubyFile()
 
+    /*val ktExt = project.extensions.findByType(KotlinProjectExtension::class.java)
+    val mpExt = project.extensions.findByType(KotlinMultiplatformExtension::class.java)
+
+    mpExt?.let {
+      it.
+    }
+    mpExt?.sourceSets?.let { ssList ->
+      ssList.forEach { ss ->
+        ss.dependencies()
+      }
+    }*/
+
     val projectPath = config.projectPath
     val target = config.projectPath
 
@@ -21,29 +33,9 @@ open class SyncTask : DefaultTask() {
       throw IllegalArgumentException("projectPath and target required")
     }
 
-    val std = ByteArrayOutputStream()
-    val err = ByteArrayOutputStream()
-    val result = projectExec(project,
-      "ruby",
-      null,
-      mutableListOf(
-        "build/projimport.rb",
-        config.projectPath!!,
-        config.target!!,
-        config.group,
-        File(project.projectDir, "src").path),
-      std,
-      err
-    )
+    val dependencyConfig = project.configurations.getByName(SyncPlugin.configName)
 
-    logger.info(String(std.toByteArray()))
-    if(result.exitValue != 0){
-      logger.error(String(err.toByteArray()))
-    }
-
-    /*val dependencyConfig = project.configurations.getByName(configName)
-
-    dependencyConfig.resolvedConfiguration.resolvedArtifacts.forEach { ra : ResolvedArtifact ->
+    val dependencySources = dependencyConfig.resolvedConfiguration.resolvedArtifacts.map { ra : ResolvedArtifact ->
       val classifier = ra.classifier
       logger.warn("dep $ra / ${ra.classifier}")
       if (classifier == null || !classifier.equals("sources")) {
@@ -51,7 +43,7 @@ open class SyncTask : DefaultTask() {
       } else {
         val sourceJarFile = ra.file
 
-        if (sourceJarFile.name.endsWith(".jar")) {
+        val explodedPath : String? = if (sourceJarFile.name.endsWith(".jar")) {
           val group = ra.moduleVersion.id.group
           val name = ra.moduleVersion.id.name
           val version = ra.moduleVersion.id.version
@@ -69,9 +61,38 @@ open class SyncTask : DefaultTask() {
             cp.from(project.zipTree(sourceJarFile))
             cp.into(folderLocation)
           }
+          folderLocation.path
+        } else {
+          null
         }
+
+        explodedPath
       }
-    }*/
+    }.filterNotNull()
+
+    val scriptArgs = mutableListOf(
+        "build/projimport.rb",
+        config.projectPath!!,
+        config.target!!,
+        config.group,
+        File(project.projectDir, "src").path)
+
+    scriptArgs.addAll(dependencySources)
+
+    val std = ByteArrayOutputStream()
+    val err = ByteArrayOutputStream()
+    val result = projectExec(project,
+        "ruby",
+        null,
+        scriptArgs,
+        std,
+        err
+    )
+
+    logger.info(String(std.toByteArray()))
+    if(result.exitValue != 0){
+      logger.error(String(err.toByteArray()))
+    }
   }
 
   fun copyRubyFile() {
