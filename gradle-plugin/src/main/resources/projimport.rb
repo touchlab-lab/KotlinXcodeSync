@@ -49,7 +49,8 @@ end.select do |path|
 end
 
 def addfiles (existingFiles, group_index, direc, pathBase, current_group, main_target)
-    Dir.glob(direc) do |item|
+
+    Dir.glob(direc).sort.each do |item|
         next if item == '.' or item == '.DS_Store'
         new_folder = File.basename(item)
 
@@ -62,7 +63,7 @@ def addfiles (existingFiles, group_index, direc, pathBase, current_group, main_t
             group_index[groupPathName] = foundGroup
             puts "creating #{groupPathName}"
           else
-            puts "exiting #{groupPathName}"
+            puts "existing #{groupPathName}"
           end
           addfiles(existingFiles, group_index, "#{item}/*", groupPathName, foundGroup, main_target)
         else

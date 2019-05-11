@@ -1,6 +1,8 @@
 package co.touchlab.kotlinxcodesync
 
 import org.gradle.api.DefaultTask
+//import org.gradle.api.artifacts.ResolvedArtifact
+//import org.gradle.api.file.CopySpec
 import org.gradle.api.tasks.TaskAction
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -38,6 +40,38 @@ open class SyncTask : DefaultTask() {
     if(result.exitValue != 0){
       logger.error(String(err.toByteArray()))
     }
+
+    /*val dependencyConfig = project.configurations.getByName(configName)
+
+    dependencyConfig.resolvedConfiguration.resolvedArtifacts.forEach { ra : ResolvedArtifact ->
+      val classifier = ra.classifier
+      logger.warn("dep $ra / ${ra.classifier}")
+      if (classifier == null || !classifier.equals("sources")) {
+        throw IllegalArgumentException("xcodeSource dependencies must have a 'sources' classifier $ra / $classifier")
+      } else {
+        val sourceJarFile = ra.file
+
+        if (sourceJarFile.name.endsWith(".jar")) {
+          val group = ra.moduleVersion.id.group
+          val name = ra.moduleVersion.id.name
+          val version = ra.moduleVersion.id.version
+          var foldername = group + "_" + name + "_" + version
+
+          foldername = foldername.replace('-', '_')
+          foldername = foldername.replace('.', '_')
+          foldername = foldername.replace(' ', '_')
+
+          val xcodeSourceDir = File(project.buildDir, "xcodeSource")
+          val folderLocation = File(xcodeSourceDir, foldername)
+
+          folderLocation.mkdirs()
+          project.copy { cp: CopySpec ->
+            cp.from(project.zipTree(sourceJarFile))
+            cp.into(folderLocation)
+          }
+        }
+      }
+    }*/
   }
 
   fun copyRubyFile() {
