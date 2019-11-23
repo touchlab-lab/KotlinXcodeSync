@@ -9,6 +9,11 @@ that.
 It is called "Sync", but currently it will only add new files. Renamed or removed files will
 need to be handled manually in Xcode.
 
+> ## **We're Hiring!**
+>
+> Touchlab is looking for Android-focused mobile engineers, experienced with Kotlin and 
+> looking to get involved with Kotlin Multiplatorm in the near future. [More info here](https://on.touchlab.co/2NrAhB8).
+
 ## Usage
 
 Add the following to the buildscript section:
