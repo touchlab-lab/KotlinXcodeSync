@@ -5,7 +5,7 @@ import org.gradle.api.Project
 
 open class SyncPlugin : Plugin<Project> {
   override fun apply(project: Project) {
-    val extension = project.extensions.create("xcode", SyncExtension::class.java)
+    val extension = project.extensions.create("xcodeSync", SyncExtension::class.java)
 
     project.afterEvaluate {
       project.tasks.register("xcodeSync", SyncTask::class.java) { task ->

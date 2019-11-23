@@ -16,7 +16,7 @@ Add the following to the buildscript section:
 ```groovy
 buildscript {
     dependencies {
-        classpath 'co.touchlab:kotlinxcodesync:0.1.5'
+        classpath 'co.touchlab:kotlinxcodesync:0.2'
     }
 }
 ```
@@ -27,7 +27,7 @@ Apply the plugin in the shared code project, and configure the plugin
 apply plugin: 'co.touchlab.kotlinxcodesync'
 
 
-xcode {
+xcodeSync {
   projectPath = "../../iosApp/iosApp.xcodeproj"
   target = "iosApp"
 }
