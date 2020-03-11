@@ -1,5 +1,7 @@
 # Kotlin Xcode Sync
 
+*Note* Soon to be deprecated. You can add folder references instead. [See here](https://github.com/touchlab/xcode-kotlin/issues/16).
+
 Import kotlin files into an Xcode project. This is used in conjunction with the [Xcode 
 Kotlin plugin](https://github.com/touchlab/xcode-kotlin) to allow for Kotlin/Native debugging in an iOS application.
 
