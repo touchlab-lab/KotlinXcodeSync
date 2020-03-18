@@ -42,3 +42,17 @@ xcodeSync {
 
 The 'projectPath' points at the Xcode project folder. 'target' is the target inside the Xcode project. There's also the optional 
 parameter 'group', which by default is set to 'Kotlin'. That is the group folder that files are copied into.
+
+Install the `xcodeproj` gem
+
+```bash
+sudo gem install xcodeproj
+```
+
+To update your Xcode project, run
+
+```bash
+./gradlew :shared:xcodeSync
+```
+
+(assuming your shared module is called `shared`)
